@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="https://i.imgur.com/wQzZ6tE.png" width="120" alt="LofiPlan Logo" />
-</p>
-
 <h1 align="center">🎧 LofiPlan</h1>
 
 <p align="center">
