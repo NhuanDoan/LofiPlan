@@ -30,13 +30,11 @@ class SongController extends Controller
             'cover'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Lưu file nhạc và ảnh
         $audioPath = $request->file('audio')->store('songs', 'public');
         $coverPath = $request->hasFile('cover')
             ? $request->file('cover')->store('covers', 'public')
             : null;
 
-        // Lấy độ dài bài hát bằng getID3
         $realPath = Storage::disk('public')->path($audioPath);
         $getID3 = new getID3;
         $fileInfo = $getID3->analyze($realPath);
@@ -74,7 +72,6 @@ class SongController extends Controller
             }
             $audioPath = $request->file('audio')->store('songs', 'public');
 
-            // Phân tích lại thời lượng
             $realPath = Storage::disk('public')->path($audioPath);
             $getID3 = new getID3;
             $fileInfo = $getID3->analyze($realPath);

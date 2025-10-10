@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="min-h-screen bg-[#0f0f10] text-white py-10 px-4">
         <div class="max-w-2xl mx-auto bg-[#181818] rounded-2xl shadow-xl p-8 border border-[#2a2a2a]">
-            <!-- Header -->
+
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-2xl font-bold text-green-400">Thêm bài hát mới</h2>
                 <a href="{{ route('songs.index') }}"
@@ -11,7 +11,6 @@
                 </a>
             </div>
 
-            <!-- Thông báo lỗi -->
             @if ($errors->any())
                 <div class="bg-red-800/40 border border-red-500 text-red-300 px-4 py-3 rounded mb-4">
                     <strong>Lỗi:</strong>
@@ -23,11 +22,9 @@
                 </div>
             @endif
 
-            <!-- Form -->
             <form action="{{ route('songs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
-                <!-- Tên bài hát -->
                 <div>
                     <label for="title" class="block text-sm font-medium text-gray-300 mb-1">
                         Tên bài hát <span class="text-red-500">*</span>
@@ -37,7 +34,6 @@
                            placeholder="Nhập tên bài hát...">
                 </div>
 
-                <!-- Nghệ sĩ -->
                 <div>
                     <label for="artist" class="block text-sm font-medium text-gray-300 mb-1">Ca sĩ / Nghệ sĩ</label>
                     <input type="text" name="artist" id="artist"
@@ -45,7 +41,6 @@
                            placeholder="Nhập tên nghệ sĩ...">
                 </div>
 
-                <!-- Upload Audio -->
                 <div>
                     <label for="audio" class="block text-sm font-medium text-gray-300 mb-1">
                         File nhạc (MP3/WAV) <span class="text-red-500">*</span>
@@ -57,7 +52,6 @@
                     <div id="duration" class="text-gray-400 text-sm mt-1 hidden">Thời lượng: <span id="time-text"></span></div>
                 </div>
 
-                <!-- Upload Ảnh bìa -->
                 <div>
                     <label for="cover" class="block text-sm font-medium text-gray-300 mb-1">Ảnh bìa (tùy chọn)</label>
                     <input type="file" name="cover" id="cover" accept="image/*"
@@ -66,7 +60,6 @@
                     <img id="cover-preview" src="" class="hidden mt-3 w-32 h-32 rounded-lg object-cover shadow-md border border-[#2a2a2a]">
                 </div>
 
-                <!-- Nút hành động -->
                 <div class="flex justify-end items-center gap-3 pt-4 border-t border-[#2a2a2a]">
                     <a href="{{ route('songs.index') }}"
                        class="px-4 py-2 bg-[#2a2a2a] hover:bg-[#3a3a3a] text-gray-200 rounded-lg transition">
@@ -93,7 +86,6 @@
             const durationBox = document.getElementById('duration');
             const timeText = document.getElementById('time-text');
 
-            // Preview ảnh bìa
             coverInput.addEventListener('change', e => {
                 const file = e.target.files[0];
                 if (file) {
@@ -102,8 +94,7 @@
                     coverPreview.classList.remove('hidden');
                 }
             });
-
-            // Preview nhạc và hiển thị thời lượng
+            
             audioInput.addEventListener('change', e => {
                 const file = e.target.files[0];
                 if (file) {
