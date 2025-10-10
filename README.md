@@ -38,29 +38,65 @@ Giao diện mang phong cách tối giản, hiện đại và yên bình, đượ
 
 ---
 
-## Cài đặt
+# Cài đặt
+## Clone dự án
 
-```bash
-# Clone dự án
-git clone https://github.com/NhuanDoan/LofiPlan.git
-cd LofiPlan
+- git clone https://github.com/NhuanDoan/LofiPlan.git
+- cd LofiPlan
 
-# Cài đặt backend
-composer install
-cp .env.example .env
-php artisan key:generate
+## 1. Cài đặt Backend (Laravel)
 
-# Cài đặt frontend
-npm install
-npm run dev
+**Chạy các lệnh:**
+- composer install 
+- cp .env.example .env
+ -php artisan key:generate
 
-# Chạy server
-# Do đã config:
+**Mở file .env và chỉnh thông tin kết nối:**
+
+- DB_CONNECTION=mysql
+- DB_HOST=127.0.0.1
+- DB_PORT=3306
+- DB_DATABASE=music_db
+- DB_USERNAME=root
+- DB_PASSWORD=
+
+**Tạo bảng dữ liệu:**
+
+- php artisan migrate
+
+## 2. Cài đặt Frontend (React + Vite)
+
+- npm install
+
+## 3. Cấu hình chạy song song
+
+**Mở file package.json, thêm phần:**
+
 "scripts": {
-        "dev": "npm-run-all --parallel serve php",
-        "serve": "vite",
-        "php": "php artisan serve",
-        "build": "vite build"
-    },
-# Nên lệnh start sevrer là
-npm run dev
+  "dev": "npm-run-all --parallel serve php",
+  "serve": "vite",
+  "php": "php artisan serve",
+  "build": "vite build"
+}
+
+**Nếu chưa có gói npm-run-all, cài thêm:**
+- npm install npm-run-all --save-dev
+
+## 4. Cấp quyền lưu file (macOS / Linux)
+
+**Chạy các lệnh:**
+- sudo chmod -R 775 storage bootstrap/cache
+- sudo chmod -R 775 public/storage
+- sudo chmod -R 775 public/storage/songs public/storage/covers
+
+## 5. Tạo liên kết thư mục lưu trữ
+
+**Chạy lệnh:** php artisan storage:link
+- **Kết quả:** The [public/storage] directory has been linked.
+
+## 6. Chạy dự án 
+
+**Chạy lệnh:** npm run dev
+
+- Laravel server: http://localhost:8000 (Hoàn tất vào link này là được)
+- Vite server: http://localhost:5173
