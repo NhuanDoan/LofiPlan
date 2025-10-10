@@ -1,50 +1,61 @@
-<h1 align="center">🎧 LofiPlan</h1>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
-  <em>Ứng dụng nghe nhạc thư giãn và lên kế hoạch cá nhân – giữ tinh thần cân bằng mỗi ngày 🌿</em>
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
----
+## About Laravel
 
-##Giới thiệu
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-**LofiPlan** là một ứng dụng web giúp bạn:
-- Nghe nhạc **Lofi Chill** để thư giãn hoặc tập trung 
-- Lên lịch công việc và ghi chú hằng ngày 
-- Giữ tinh thần **tỉnh táo – cân bằng – sáng tạo** 
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Giao diện tối hiện đại, cảm hứng từ phong cách lofi workspace, được thiết kế để mang lại trải nghiệm yên bình và dễ chịu nhất khi làm việc.
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Tính năng chính
-**Trình phát nhạc mini** — điều khiển phát/tạm dừng, chỉnh âm lượng, thêm bài hát
-**Lên kế hoạch và quản lý công việc** theo ngày  
-**Xác thực người dùng** (đăng nhập / đăng ký / quên mật khẩu / đổi mật khẩu)  
+## Learning Laravel
 
----
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-## Công nghệ sử dụng
+You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-| Thành phần | Công nghệ |
-|-------------|------------|
-| **Frontend** | React + TailwindCSS + Lucide Icons |
-| **Backend** | Laravel 11 |
-| **Cơ sở dữ liệu** | MySQL |
-| **Build tool** | Vite |
-| **Triển khai** | InfinityFree / Localhost |
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
----
+## Laravel Sponsors
 
-Cài đặt
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-```bash
-- Clone project
-git clone https://github.com/NhuanDoan/LofiPlan.git
-cd LofiPlan
+### Premium Partners
 
+- **[Vehikl](https://vehikl.com)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Redberry](https://redberry.international/laravel-development)**
+- **[Active Logic](https://activelogic.com)**
 
-- Cài đặt frontend
-npm install
-npm run dev
+## Contributing
 
-- Chạy server do là đã tích hợp php artisan serve trong file config nên chỉ cần chạy 1 lệnh 
-npm run dev
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
