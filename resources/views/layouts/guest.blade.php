@@ -26,8 +26,6 @@
         © {{ date('Y') }} <span class="text-green-400 font-semibold">LofiPlan</span>. All rights reserved.
     </footer>
 
-    <script>
-        lucide.createIcons();
-    </script>
+    <script>window.lucide?.createIcons();</script>
 </body>
 </html>

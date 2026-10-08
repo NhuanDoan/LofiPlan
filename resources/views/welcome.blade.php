@@ -9,7 +9,6 @@
       <link rel="preconnect" href="https://fonts.bunny.net">
       <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
-      <script src="https://unpkg.com/lucide@latest"></script>
 
       @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
@@ -101,10 +100,6 @@
           © {{ date('Y') }} <span class="text-green-400 font-semibold">LofiPlan</span>. All rights reserved.
       </footer>
 
-      <script>
-          lucide.createIcons();
-      </script>
-
       <style>
           @keyframes fade-in {
               from { opacity: 0; transform: translateY(10px); }
@@ -116,4 +111,3 @@
       </style>
   </body>
 </html>
-

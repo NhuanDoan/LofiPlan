@@ -35,5 +35,6 @@
             </main>
         </div>
         @stack('scripts')
+        <script>window.lucide?.createIcons();</script>
     </body>
 </html>

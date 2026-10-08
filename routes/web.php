@@ -15,8 +15,12 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    Route::resource('songs', SongController::class);
-    Route::get('/player/{song}', [SongController::class, 'player'])->name('songs.player');
+    Route::get('/songs', [SongController::class, 'index'])->name('songs.index');
+    Route::get('/songs/create', [SongController::class, 'create'])->name('songs.create');
+    Route::post('/songs', [SongController::class, 'store'])->name('songs.store');
+    Route::get('/songs/{song}/edit', [SongController::class, 'edit'])->name('songs.edit');
+    Route::put('/songs/{song}', [SongController::class, 'update'])->name('songs.update');
+    Route::delete('/songs/{song}', [SongController::class, 'destroy'])->name('songs.destroy');
 
     Route::resource('todos', TodoController::class);
     Route::patch('/todos/{todo}/toggle', [TodoController::class, 'toggleDone'])->name('todos.toggle');

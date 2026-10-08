@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
+use Throwable;
 use getID3;
 
 class SongController extends Controller
@@ -30,35 +30,44 @@ class SongController extends Controller
             'cover'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $audioPath = $request->file('audio')->store('songs', 'public');
-        $coverPath = $request->hasFile('cover')
-            ? $request->file('cover')->store('covers', 'public')
-            : null;
+        $audioPath = null;
+        $coverPath = null;
 
-        $realPath = Storage::disk('public')->path($audioPath);
-        $getID3 = new getID3;
-        $fileInfo = $getID3->analyze($realPath);
-        $duration = $fileInfo['playtime_seconds'] ?? null;
+        try {
+            $audioPath = $request->file('audio')->store('songs', 'public');
+            $coverPath = $request->file('cover')?->store('covers', 'public');
+            $fileInfo = (new getID3)->analyze(Storage::disk('public')->path($audioPath));
 
-        Song::create([
-            'title'      => $request->title,
-            'artist'     => $request->artist,
-            'file_path'  => $audioPath,
-            'cover_path' => $coverPath,
-            'duration'   => $duration ? round($duration) : null,
-            'user_id'    => Auth::id() ?? 1,
-        ]);
+            Song::create([
+                'title' => $request->string('title')->toString(),
+                'artist' => $request->input('artist'),
+                'file_path' => $audioPath,
+                'cover_path' => $coverPath,
+                'duration' => isset($fileInfo['playtime_seconds']) ? round($fileInfo['playtime_seconds']) : null,
+                'user_id' => $request->user()->id,
+            ]);
+        } catch (Throwable $exception) {
+            foreach ([$audioPath, $coverPath] as $path) {
+                if ($path) Storage::disk('public')->delete($path);
+            }
+
+            throw $exception;
+        }
 
         return redirect()->route('songs.index')->with('success', '🎶 Bài hát đã được tải lên thành công!');
     }
 
     public function edit(Song $song)
     {
+        $this->authorize('update', $song);
+
         return view('songs.edit', compact('song'));
     }
 
     public function update(Request $request, Song $song)
     {
+        $this->authorize('update', $song);
+
         $request->validate([
             'title'  => 'required|string|max:255',
             'artist' => 'nullable|string|max:255',
@@ -66,44 +75,55 @@ class SongController extends Controller
             'cover'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        if ($request->hasFile('audio')) {
-            if ($song->file_path && Storage::disk('public')->exists($song->file_path)) {
-                Storage::disk('public')->delete($song->file_path);
+        $oldAudioPath = $song->file_path;
+        $oldCoverPath = $song->cover_path;
+        $newAudioPath = null;
+        $newCoverPath = null;
+
+        try {
+            if ($request->hasFile('audio')) {
+                $newAudioPath = $request->file('audio')->store('songs', 'public');
+                $fileInfo = (new getID3)->analyze(Storage::disk('public')->path($newAudioPath));
+                $song->file_path = $newAudioPath;
+                $song->duration = isset($fileInfo['playtime_seconds'])
+                    ? round($fileInfo['playtime_seconds'])
+                    : $song->duration;
             }
-            $audioPath = $request->file('audio')->store('songs', 'public');
 
-            $realPath = Storage::disk('public')->path($audioPath);
-            $getID3 = new getID3;
-            $fileInfo = $getID3->analyze($realPath);
-            $song->duration = $fileInfo['playtime_seconds'] ?? $song->duration;
+            if ($request->hasFile('cover')) {
+                $newCoverPath = $request->file('cover')->store('covers', 'public');
+                $song->cover_path = $newCoverPath;
+            }
 
-            $song->file_path = $audioPath;
+            $song->title = $request->string('title')->toString();
+            $song->artist = $request->input('artist');
+            $song->save();
+        } catch (Throwable $exception) {
+            foreach ([$newAudioPath, $newCoverPath] as $path) {
+                if ($path) Storage::disk('public')->delete($path);
+            }
+
+            throw $exception;
         }
 
-        if ($request->hasFile('cover')) {
-            if ($song->cover_path && Storage::disk('public')->exists($song->cover_path)) {
-                Storage::disk('public')->delete($song->cover_path);
-            }
-            $song->cover_path = $request->file('cover')->store('covers', 'public');
+        foreach ([[$oldAudioPath, $newAudioPath], [$oldCoverPath, $newCoverPath]] as [$oldPath, $newPath]) {
+            if ($newPath && $oldPath) Storage::disk('public')->delete($oldPath);
         }
-
-        $song->title = $request->title;
-        $song->artist = $request->artist;
-        $song->save();
 
         return redirect()->route('songs.index')->with('success', '✅ Cập nhật bài hát thành công!');
     }
 
     public function destroy(Song $song)
     {
-        if ($song->file_path && Storage::disk('public')->exists($song->file_path)) {
-            Storage::disk('public')->delete($song->file_path);
-        }
-        if ($song->cover_path && Storage::disk('public')->exists($song->cover_path)) {
-            Storage::disk('public')->delete($song->cover_path);
+        $this->authorize('delete', $song);
+
+        $paths = [$song->file_path, $song->cover_path];
+        $song->delete();
+
+        foreach ($paths as $path) {
+            if ($path) Storage::disk('public')->delete($path);
         }
 
-        $song->delete();
         return redirect()->route('songs.index')->with('success', '🗑️ Đã xóa bài hát!');
     }
 }

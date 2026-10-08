@@ -1,102 +1,37 @@
-<h1 align="center">LofiPlan</h1>
+# LofiPlan
 
-<p align="center">
-  <em>Ứng dụng nghe nhạc thư giãn và lên kế hoạch cá nhân – giúp bạn giữ tinh thần cân bằng và tập trung mỗi ngày.</em>
-</p>
+LofiPlan combines a shared music playlist and player with a personal weekly task planner. It is a Laravel application rendered with Blade, with Alpine.js and Tailwind CSS assets built by Vite.
 
----
+## Stack
 
-## Giới thiệu
+- PHP 8.2+
+- Laravel 12
+- Blade, Alpine.js, Tailwind CSS, and Vite
+- PostgreSQL (database: `lofiplan`)
 
-**LofiPlan** là ứng dụng web kết hợp giữa âm nhạc và quản lý công việc, giúp bạn:
-- Nghe nhạc **Lofi Chill** để thư giãn hoặc tập trung làm việc.  
-- Lên lịch và theo dõi công việc hằng ngày.  
-- Giữ tinh thần **tỉnh táo, cân bằng và sáng tạo** trong không gian yên tĩnh.  
+## Local setup
 
-Giao diện mang phong cách tối giản, hiện đại và yên bình, được thiết kế dành riêng cho những ai yêu thích sự tập trung và thư giãn cùng âm nhạc.
+```sh
+composer install
+cp .env.example .env
+php artisan key:generate
+createdb lofiplan
+php artisan migrate --seed
+php artisan storage:link
+npm install
+npm run dev
+```
 
----
+Open <http://localhost:8000>. The `dev` script starts Laravel and Vite together. Use `npm run build` to create production frontend assets.
 
-## Tính năng chính
+The local PostgreSQL defaults are `127.0.0.1:5432` with the `postgres` user and no password. Adjust the `DB_*` values in `.env` to match your PostgreSQL setup. Keep `.env` and production credentials out of version control.
 
-- Trình phát nhạc mini: phát / tạm dừng / chuyển bài / chỉnh âm lượng.  
-- Quản lý công việc và lịch trình cá nhân.  
-- Xác thực người dùng (đăng ký, đăng nhập, quên mật khẩu, đổi mật khẩu).  
-- Không gian làm việc yên tĩnh giúp tăng hiệu suất.
+Email uses Mailtrap Sandbox SMTP (`sandbox.smtp.mailtrap.io:2525`). Set `MAIL_USERNAME` and `MAIL_PASSWORD` in `.env` to the SMTP credentials from the Mailtrap sandbox Integration tab. Sandbox messages appear in the Mailtrap inbox and are not delivered to real recipients.
 
----
+## Main features
 
-## Công nghệ sử dụng
+- Registration, login, email verification, and profile management.
+- Shared playlist: signed-in users can upload songs; each uploader can edit or remove their own uploads.
+- Weekly task planner with per-user tasks and morning, afternoon, and evening shifts.
 
-| Thành phần | Công nghệ |
-|-------------|------------|
-| **Frontend** | React + TailwindCSS + Lucide Icons |
-| **Backend** | Laravel 11 |
-| **Cơ sở dữ liệu** | MySQL |
-| **Build tool** | Vite |
-| **Triển khai** | Localhost |
-
----
-
-# Cài đặt
-## Clone dự án
-
-- git clone https://github.com/NhuanDoan/LofiPlan.git
-- cd LofiPlan
-
-## 1. Cài đặt Backend (Laravel)
-
-**Chạy các lệnh:**
-- composer install 
-- cp .env.example .env
- -php artisan key:generate
-
-**Mở file .env và chỉnh thông tin kết nối:**
-
-- DB_CONNECTION=mysql
-- DB_HOST=127.0.0.1
-- DB_PORT=3306
-- DB_DATABASE=music_db
-- DB_USERNAME=root
-- DB_PASSWORD=
-
-**Tạo bảng dữ liệu:**
-
-- php artisan migrate
-
-## 2. Cài đặt Frontend (React + Vite)
-
-- npm install
-
-## 3. Cấu hình chạy song song
-
-**Mở file package.json, thêm phần:**
-
-"scripts": {
-  "dev": "npm-run-all --parallel serve php",
-  "serve": "vite",
-  "php": "php artisan serve",
-  "build": "vite build"
-}
-
-**Nếu chưa có gói npm-run-all, cài thêm:**
-- npm install npm-run-all --save-dev
-
-## 4. Cấp quyền lưu file (macOS / Linux)
-
-**Chạy các lệnh:**
-- sudo chmod -R 775 storage bootstrap/cache
-- sudo chmod -R 775 public/storage
-- sudo chmod -R 775 public/storage/songs public/storage/covers
-
-## 5. Tạo liên kết thư mục lưu trữ
-
-**Chạy lệnh:** php artisan storage:link
-- **Kết quả:** The [public/storage] directory has been linked.
-
-## 6. Chạy dự án 
-
-**Chạy lệnh:** npm run dev
-
-- Laravel server: http://localhost:8000 (Hoàn tất vào link này là được)
-- Vite server: http://localhost:5173
+Database schema changes belong in `database/migrations`; use seeders for repeatable sample data. `music_db.sql` is a legacy database export and may not match the current migrations.

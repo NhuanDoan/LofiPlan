@@ -11,7 +11,10 @@ class TodoController extends Controller
 {
     public function index(Request $request)
     {
-        $base = $request->query('date') ? Carbon::parse($request->query('date')) : Carbon::today();
+        $validated = $request->validate([
+            'date' => ['sometimes', 'date_format:Y-m-d'],
+        ]);
+        $base = isset($validated['date']) ? Carbon::createFromFormat('Y-m-d', $validated['date']) : Carbon::today();
 
         $startOfWeek = $base->copy()->startOfWeek();
         $days = [];
@@ -25,7 +28,7 @@ class TodoController extends Controller
         $todos = Todo::where('user_id', Auth::id())
                      ->whereBetween('date', [$start, $end])
                      ->orderBy('date')
-                     ->orderByRaw("FIELD(shift, 'morning','afternoon','evening')")
+                     ->orderByRaw("CASE shift WHEN 'morning' THEN 0 WHEN 'afternoon' THEN 1 WHEN 'evening' THEN 2 ELSE 3 END")
                      ->get()
                      ->groupBy(fn($t) => $t->date->toDateString());
 
@@ -36,8 +39,8 @@ class TodoController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'date' => 'required|date',
+            'description' => 'nullable|string|max:5000',
+            'date' => 'required|date_format:Y-m-d',
             'shift' => 'required|in:morning,afternoon,evening',
         ]);
 
@@ -64,13 +67,25 @@ class TodoController extends Controller
 
         $data = $request->validate([
             'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:5000',
             'is_done' => 'sometimes|boolean',
         ]);
 
         $todo->update($data);
 
         return response()->json($todo);
+    }
+
+    public function toggleDone(Todo $todo)
+    {
+        $this->authorizeTodo($todo);
+        $todo->update(['is_done' => ! $todo->is_done]);
+
+        if (request()->wantsJson()) {
+            return response()->json($todo);
+        }
+
+        return redirect()->back()->with('success', 'Trạng thái công việc đã được cập nhật.');
     }
 
     public function destroy(Todo $todo)

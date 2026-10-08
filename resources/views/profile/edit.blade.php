@@ -38,10 +38,6 @@
 
         </div>
     </div>
-
-    <script>
-        lucide.createIcons();
-    </script>
 </x-app-layout>
 
 <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
@@ -91,4 +87,3 @@
         </div>
     </form>
 </x-modal>
-

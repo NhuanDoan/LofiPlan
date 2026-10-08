@@ -45,8 +45,4 @@
             </form>
         </div>
     </div>
-
-    <script>
-        lucide.createIcons();
-    </script>
 </x-guest-layout>

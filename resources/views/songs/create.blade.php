@@ -74,41 +74,4 @@
         </div>
     </div>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    @push('scripts')
-        <script>
-            lucide.createIcons();
-
-            const audioInput = document.getElementById('audio');
-            const audioPreview = document.getElementById('audio-preview');
-            const coverInput = document.getElementById('cover');
-            const coverPreview = document.getElementById('cover-preview');
-            const durationBox = document.getElementById('duration');
-            const timeText = document.getElementById('time-text');
-
-            coverInput.addEventListener('change', e => {
-                const file = e.target.files[0];
-                if (file) {
-                    const url = URL.createObjectURL(file);
-                    coverPreview.src = url;
-                    coverPreview.classList.remove('hidden');
-                }
-            });
-            
-            audioInput.addEventListener('change', e => {
-                const file = e.target.files[0];
-                if (file) {
-                    const url = URL.createObjectURL(file);
-                    audioPreview.src = url;
-                    audioPreview.classList.remove('hidden');
-                    audioPreview.addEventListener('loadedmetadata', () => {
-                        const minutes = Math.floor(audioPreview.duration / 60);
-                        const seconds = Math.floor(audioPreview.duration % 60).toString().padStart(2, '0');
-                        timeText.textContent = `${minutes}:${seconds}`;
-                        durationBox.classList.remove('hidden');
-                    });
-                }
-            });
-        </script>
-    @endpush
 </x-app-layout>

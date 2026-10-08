@@ -53,6 +53,7 @@
                         </div>
 
                         <div class="col-span-12 sm:col-span-2 flex sm:justify-center justify-end items-center gap-2 sm:gap-3 mt-2 sm:mt-0">
+                            @can('update', $song)
                             <a href="{{ route('songs.edit', $song) }}"
                             class="flex items-center justify-center gap-1 sm:gap-2 w-10 h-10 sm:w-auto sm:px-3 sm:py-1.5 
                                     rounded-md bg-[#1DB954]/10 text-green-400 hover:bg-[#1DB954]/20 
@@ -72,6 +73,7 @@
                                     <span class="hidden sm:inline">Xóa</span>
                                 </button>
                             </form>
+                            @endcan
                         </div>
                     </div>
                 @endforeach
@@ -80,140 +82,4 @@
     </div>
 
     @include('components.player')
-
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    @push('scripts')
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const audio = document.getElementById("audio");
-            const playBtn = document.getElementById("play-btn");
-            const playIcon = document.getElementById("play-icon");
-            const pauseIcon = document.getElementById("pause-icon");
-            const progress = document.getElementById("progress");
-            const volume = document.getElementById("volume");
-            const title = document.getElementById("player-title");
-            const artist = document.getElementById("player-artist");
-            const cover = document.getElementById("player-cover");
-            const prevBtn = document.getElementById("prev-btn");
-            const nextBtn = document.getElementById("next-btn");
-            const searchInput = document.getElementById("searchInput");
-            const currentTimeEl = document.getElementById("current-time");
-            const totalTimeEl = document.getElementById("total-time");
-
-            audio.addEventListener("loadedmetadata", () => {
-                totalTimeEl.textContent = formatTime(audio.duration);
-            });
-
-            audio.addEventListener("timeupdate", () => {
-                if (audio.duration) {
-                    progress.value = (audio.currentTime / audio.duration) * 100;
-                    currentTimeEl.textContent = formatTime(audio.currentTime);
-                    totalTimeEl.textContent = formatTime(audio.duration);
-                }
-            });
-
-            progress.addEventListener("input", (e) => {
-                audio.currentTime = (e.target.value / 100) * audio.duration;
-            });
-
-            function formatTime(sec) {
-                if (isNaN(sec)) return "0:00";
-                const m = Math.floor(sec / 60);
-                const s = Math.floor(sec % 60);
-                return `${m}:${s < 10 ? "0" + s : s}`;
-            }
-
-            const items = Array.from(document.querySelectorAll('.song-row')).map(e => ({
-                url: e.dataset.url,
-                title: e.dataset.title,
-                artist: e.dataset.artist,
-                cover: e.dataset.cover
-            }));
-
-            let idx = 0;
-
-            function loadSong(i) {
-                const s = items[i];
-                if (!s) return;
-                audio.src = s.url;
-                title.innerText = s.title;
-                artist.innerText = s.artist;
-                cover.src = s.cover || '/default-cover.png';
-                audio.load();
-                audio.play();
-                playIcon.classList.add("hidden");
-                pauseIcon.classList.remove("hidden");
-            }
-
-            playBtn.addEventListener("click", () => {
-                if (audio.paused) {
-                    audio.play();
-                    playIcon.classList.add("hidden");
-                    pauseIcon.classList.remove("hidden");
-                } else {
-                    audio.pause();
-                    playIcon.classList.remove("hidden");
-                    pauseIcon.classList.add("hidden");
-                }
-            });
-
-            nextBtn.addEventListener("click", () => {
-                idx = (idx + 1) % items.length;
-                loadSong(idx);
-            });
-
-            prevBtn.addEventListener("click", () => {
-                idx = (idx - 1 + items.length) % items.length;
-                loadSong(idx);
-            });
-
-            progress.addEventListener("input", e => {
-                const value = e.target.value;
-                audio.currentTime = (value / 100) * audio.duration;
-            });
-
-            audio.addEventListener("timeupdate", () => {
-                if (audio.duration) {
-                    progress.value = (audio.currentTime / audio.duration) * 100;
-                    currentTimeEl.textContent = formatTime(audio.currentTime);
-                    totalTimeEl.textContent = formatTime(audio.duration);
-                }
-            });
-
-            audio.addEventListener("ended", () => {
-                idx = (idx + 1) % items.length;
-                loadSong(idx);
-            });
-
-            volume.addEventListener("input", e => {
-                audio.volume = e.target.value;
-            });
-
-            searchInput.addEventListener("input", (e) => {
-                const keyword = e.target.value.toLowerCase();
-                document.querySelectorAll(".song-row").forEach(row => {
-                    const title = row.dataset.title.toLowerCase();
-                    const artist = row.dataset.artist.toLowerCase();
-                    row.style.display = (title.includes(keyword) || artist.includes(keyword)) ? "" : "none";
-                });
-            });
-
-            document.querySelectorAll('.song-row').forEach((el, i) => {
-                el.addEventListener('click', () => {
-                    idx = i;
-                    loadSong(idx);
-                });
-            });
-
-            function formatTime(sec) {
-                if (isNaN(sec)) return "0:00";
-                const m = Math.floor(sec / 60);
-                const s = Math.floor(sec % 60);
-                return `${m}:${s < 10 ? "0" + s : s}`;
-            }
-        });
-        lucide.createIcons();
-    </script>
-    @endpush
 </x-app-layout>

@@ -41,8 +41,4 @@
         </div>
 
     </div>
-
-    <script>
-        lucide.createIcons();
-    </script>
 </x-app-layout>

@@ -510,7 +510,6 @@
                 } 
             });
         })();
-        lucide.createIcons();
     </script>
     @endpush
 </x-app-layout>
